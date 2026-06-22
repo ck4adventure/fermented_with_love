@@ -10,7 +10,12 @@
     "test": "jest"
   },
   "dependencies": {
+    "@mdx-js/loader": "^3.1.1",
+    "@mdx-js/react": "^3.1.1",
+    "@next/mdx": "^16.2.9",
     "@vercel/analytics": "^1.6.1",
+    "gray-matter": "^4.0.3",
+    "marked": "^18.0.5",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3"

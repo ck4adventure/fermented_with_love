@@ -1,6 +1,5 @@
 'use client';
 
-import './globals.css';
 import Link from 'next/link';
 
 
@@ -117,14 +116,14 @@ export default function LandingPage() {
               <div className="guide-card-icon">🥖</div>
               <h3 className="guide-card-title">Sourdough</h3>
               <p className="guide-card-desc">Master the art of sourdough from starter to loaf with detailed step-by-step guides.</p>
-              <span className="guide-card-link">Coming Soon</span>
+              <span className="guide-card-link">Explore →</span>
             </Link>
 
-            <Link href="/drinks" className="guide-card">
+            <Link href="/winemaking" className="guide-card">
               <div className="guide-card-icon">🍎</div>
-              <h3 className="guide-card-title">Cider & Fermented Drinks</h3>
-              <p className="guide-card-desc">Ferment your own cider, kombucha, and other delicious beverages at home.</p>
-              <span className="guide-card-link">Coming Soon</span>
+              <h3 className="guide-card-title">Winemaking</h3>
+              <p className="guide-card-desc">Master wild fermentation from fruit selection to bottling. Complete guide to making fruit wine at home.</p>
+              <span className="guide-card-link">Explore →</span>
             </Link>
           </div>
         </div>
