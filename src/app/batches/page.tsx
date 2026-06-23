@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import type { Batch } from '@/db/schema';
 
 const TYPE_EMOJI: Record<string, string> = {
@@ -20,6 +21,7 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 export default function BatchesPage() {
+  const router = useRouter();
   const [batches, setBatches] = useState<Batch[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -29,6 +31,11 @@ export default function BatchesPage() {
       .then(setBatches)
       .finally(() => setLoading(false));
   }, []);
+
+  async function handleLogout() {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    router.push('/login');
+  }
 
   const active = batches.filter(b => b.status === 'active');
   const inactive = batches.filter(b => b.status !== 'active');
@@ -47,9 +54,14 @@ export default function BatchesPage() {
                 Track what&apos;s bubbling, when you started, and what you&apos;ve noticed along the way.
               </p>
             </div>
-            <Link href="/batches/new" className="btn btn-moss btn-md">
-              + New Batch
-            </Link>
+            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+              <button onClick={handleLogout} className="btn btn-sm" style={{ background: 'transparent', color: 'var(--pebble)', border: '1.5px solid var(--chalk)' }}>
+                Sign out
+              </button>
+              <Link href="/batches/new" className="btn btn-moss btn-md">
+                + New Batch
+              </Link>
+            </div>
           </div>
         </div>
       </section>
