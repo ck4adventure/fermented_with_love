@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import '../globals.css';
 
 interface Post {
   title: string;
@@ -50,12 +49,16 @@ export default function WinemakingPage() {
     'getting-started': 'Getting Started',
     'working-with-fruit': 'Working with Fruit',
     fermentation: 'Fermentation',
+		'beyond-fruit-wines': 'Beyond Fruit Wines',
+		'starting-points': 'Starting Points',
   };
 
   const sectionEmojis: { [key: string]: string } = {
     'getting-started': '🍇',
     'working-with-fruit': '🍑',
     fermentation: '🍾',
+		'beyond-fruit-wines': '🌿',
+		'starting-points': '🌸',
   };
 
   return (
