@@ -20,7 +20,7 @@ export default function Footer() {
             {[
               { label: "Kefir", href: "/kefir" },
               { label: "Sourdough", href: "/sourdough" },
-              { label: "Cider and Wines", href: "/drinks" },
+              { label: "Cider and Wines", href: "/winemaking" },
             ].map(l => (
               <Link key={l.label} href={l.href} className="footer-link">{l.label}</Link>
             ))}

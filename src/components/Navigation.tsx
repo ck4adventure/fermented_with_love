@@ -8,7 +8,7 @@ export function Navigation() {
   const navItems = [
     { label: 'Kefir', href: '/kefir' },
     { label: 'Sourdough', href: '/sourdough' },
-    { label: 'Cider and Wines', href: '/drinks' },
+    { label: 'Cider and Wines', href: '/winemaking' },
   ];
 
   return (
