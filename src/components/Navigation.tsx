@@ -9,6 +9,7 @@ export function Navigation() {
     { label: 'Kefir', href: '/kefir' },
     { label: 'Sourdough', href: '/sourdough' },
     { label: 'Cider and Wines', href: '/winemaking' },
+    { label: 'Batch Log', href: '/batches' },
   ];
 
   return (
