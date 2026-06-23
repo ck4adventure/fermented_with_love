@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const COOKIE = 'fwl_session';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const session = request.cookies.get(COOKIE)?.value;
   const secret = process.env.SESSION_SECRET;
 
