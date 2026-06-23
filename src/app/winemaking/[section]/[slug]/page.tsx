@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import MDXContent from '@/components/MDXContent';
-import '../../../globals.css';
 
 interface PostData {
   title: string;
