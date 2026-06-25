@@ -18,7 +18,7 @@ export async function GET(_req: Request, { params }: Params) {
 
 export async function POST(request: Request, { params }: Params) {
   const { id } = await params;
-  const body = await request.json() as Pick<NewBatchEntry, 'entryDate' | 'observation' | 'actionTaken'>;
+  const body = await request.json() as Pick<NewBatchEntry, 'entryDate' | 'observation' | 'actionTaken' | 'gravity'>;
 
   if (!body.entryDate || !body.observation) {
     return NextResponse.json({ error: 'entryDate and observation are required' }, { status: 400 });

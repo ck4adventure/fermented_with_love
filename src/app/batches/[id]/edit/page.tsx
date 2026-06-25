@@ -13,12 +13,12 @@ export default function EditBatchPage() {
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [form, setForm] = useState({ name: '', type: 'wine', notes: '' });
+  const [form, setForm] = useState({ name: '', type: 'wine', notes: '', gravity: '' });
 
   useEffect(() => {
     fetch(`/api/batches/${id}`)
       .then(r => r.json())
-      .then((b: Batch) => setForm({ name: b.name, type: b.type, notes: b.notes ?? '' }))
+      .then((b: Batch) => setForm({ name: b.name, type: b.type, notes: b.notes ?? '', gravity: b.gravity != null ? String(b.gravity) : '' }))
       .finally(() => setLoading(false));
   }, [id]);
 
@@ -34,7 +34,10 @@ export default function EditBatchPage() {
       const res = await fetch(`/api/batches/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          gravity: form.gravity !== '' ? parseFloat(form.gravity) : null,
+        }),
       });
       if (!res.ok) throw new Error();
       router.push(`/batches/${id}`);
@@ -82,6 +85,20 @@ export default function EditBatchPage() {
                 </button>
               ))}
             </div>
+          </div>
+
+          <div className="field">
+            <label className="field-label">Original Gravity <span style={{ color: 'var(--pebble)', fontWeight: 400 }}>(optional)</span></label>
+            <input
+              className="field-input"
+              type="number"
+              step="0.001"
+              min="0.900"
+              max="1.200"
+              placeholder="e.g. 1.052"
+              value={form.gravity}
+              onChange={e => set('gravity', e.target.value)}
+            />
           </div>
 
           <div className="field">

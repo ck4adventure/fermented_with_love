@@ -9,7 +9,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const body = await request.json() as Pick<NewBatch, 'name' | 'type' | 'startDate' | 'notes'>;
+  const body = await request.json() as Pick<NewBatch, 'name' | 'type' | 'startDate' | 'notes' | 'gravity'>;
 
   if (!body.name || !body.type || !body.startDate) {
     return NextResponse.json({ error: 'name, type, and startDate are required' }, { status: 400 });
