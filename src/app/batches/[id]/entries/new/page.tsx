@@ -13,6 +13,7 @@ export default function NewEntryPage() {
     entryDate: new Date().toISOString().split('T')[0],
     observation: '',
     actionTaken: '',
+    gravity: '',
   });
 
   function set(field: string, value: string) {
@@ -27,7 +28,10 @@ export default function NewEntryPage() {
       const res = await fetch(`/api/batches/${id}/entries`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          gravity: form.gravity !== '' ? parseFloat(form.gravity) : null,
+        }),
       });
       if (!res.ok) throw new Error();
       router.push(`/batches/${id}`);
@@ -66,6 +70,20 @@ export default function NewEntryPage() {
               onChange={e => set('observation', e.target.value)}
               required
               style={{ resize: 'vertical' }}
+            />
+          </div>
+
+          <div className="field">
+            <label className="field-label">Gravity <span style={{ color: 'var(--pebble)', fontWeight: 400 }}>(optional)</span></label>
+            <input
+              className="field-input"
+              type="number"
+              step="0.001"
+              min="0.900"
+              max="1.200"
+              placeholder="e.g. 1.010"
+              value={form.gravity}
+              onChange={e => set('gravity', e.target.value)}
             />
           </div>
 

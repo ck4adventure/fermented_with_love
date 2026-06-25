@@ -15,6 +15,7 @@ export default function NewBatchPage() {
     type: 'wine',
     startDate: new Date().toISOString().split('T')[0],
     notes: '',
+    gravity: '',
   });
 
   function set(field: string, value: string) {
@@ -29,7 +30,10 @@ export default function NewBatchPage() {
       const res = await fetch('/api/batches', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          gravity: form.gravity !== '' ? parseFloat(form.gravity) : null,
+        }),
       });
       if (!res.ok) throw new Error('Failed to create batch');
       const batch = await res.json();
@@ -103,6 +107,20 @@ export default function NewBatchPage() {
               value={form.startDate}
               onChange={e => set('startDate', e.target.value)}
               required
+            />
+          </div>
+
+          <div className="field">
+            <label className="field-label">Original Gravity <span style={{ color: 'var(--pebble)', fontWeight: 400 }}>(optional)</span></label>
+            <input
+              className="field-input"
+              type="number"
+              step="0.001"
+              min="0.900"
+              max="1.200"
+              placeholder="e.g. 1.052"
+              value={form.gravity}
+              onChange={e => set('gravity', e.target.value)}
             />
           </div>
 
