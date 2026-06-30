@@ -76,11 +76,6 @@ export default function MDXContent({ content }: { content: string }) {
           margin: 0.75rem 0;
         }
 
-        .mdx-content :global(li) :global(strong) {
-          display: inline-block;
-          min-width: 200px;
-        }
-
         .mdx-content :global(blockquote) {
           border-left: 4px solid var(--moss);
           padding-left: 1.5rem;
@@ -174,11 +169,6 @@ export default function MDXContent({ content }: { content: string }) {
           .mdx-content :global(ul),
           .mdx-content :global(ol) {
             padding-left: 1.5rem;
-          }
-
-          .mdx-content :global(li) :global(strong) {
-            display: block;
-            margin-bottom: 0.25rem;
           }
 
           .mdx-content :global(pre) {
