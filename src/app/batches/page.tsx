@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Batch } from '@/db/schema';
+import { useLoggedIn } from '@/hooks/useLoggedIn';
 
 const TYPE_EMOJI: Record<string, string> = {
   wine: '🍷',
@@ -22,6 +23,7 @@ const STATUS_COLORS: Record<string, string> = {
 
 export default function BatchesPage() {
   const router = useRouter();
+  const loggedIn = useLoggedIn();
   const [batches, setBatches] = useState<Batch[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -55,12 +57,20 @@ export default function BatchesPage() {
               </p>
             </div>
             <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-              <button onClick={handleLogout} className="btn btn-sm" style={{ background: 'transparent', color: 'var(--pebble)', border: '1.5px solid var(--chalk)' }}>
-                Sign out
-              </button>
-              <Link href="/batches/new" className="btn btn-moss btn-md">
-                + New Batch
-              </Link>
+              {loggedIn ? (
+                <>
+                  <button onClick={handleLogout} className="btn btn-sm" style={{ background: 'transparent', color: 'var(--pebble)', border: '1.5px solid var(--chalk)' }}>
+                    Sign out
+                  </button>
+                  <Link href="/batches/new" className="btn btn-moss btn-md">
+                    + New Batch
+                  </Link>
+                </>
+              ) : (
+                <Link href="/login" className="btn btn-outline btn-sm">
+                  Log in
+                </Link>
+              )}
             </div>
           </div>
         </div>
@@ -73,8 +83,8 @@ export default function BatchesPage() {
           ) : batches.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '5rem 0' }}>
               <p style={{ fontSize: '3rem', marginBottom: '1rem' }}>🫙</p>
-              <p style={{ color: 'var(--stone)', marginBottom: '1.5rem' }}>No batches yet. Start your first ferment!</p>
-              <Link href="/batches/new" className="btn btn-moss btn-md">+ New Batch</Link>
+              <p style={{ color: 'var(--stone)', marginBottom: '1.5rem' }}>No batches yet. {loggedIn ? 'Start your first ferment!' : ''}</p>
+              {loggedIn && <Link href="/batches/new" className="btn btn-moss btn-md">+ New Batch</Link>}
             </div>
           ) : (
             <>

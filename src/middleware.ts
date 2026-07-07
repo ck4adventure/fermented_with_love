@@ -16,5 +16,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/batches/:path*'],
+  matcher: ['/batches/new', '/batches/:id/edit', '/batches/:id/entries/new'],
 };

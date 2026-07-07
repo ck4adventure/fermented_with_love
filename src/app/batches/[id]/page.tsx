@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import type { Batch, BatchEntry } from '@/db/schema';
+import { useLoggedIn } from '@/hooks/useLoggedIn';
 
 const TYPE_EMOJI: Record<string, string> = {
   wine: '🍷', kefir: '🥛', sourdough: '🍞', kombucha: '🍵', other: '🫙',
@@ -14,6 +15,7 @@ const STATUS_OPTIONS = ['active', 'paused', 'finished', 'abandoned'] as const;
 export default function BatchDetailPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
+  const loggedIn = useLoggedIn();
   const [batch, setBatch] = useState<Batch | null>(null);
   const [entries, setEntries] = useState<BatchEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -81,11 +83,35 @@ export default function BatchDetailPage() {
             </div>
 
             <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
-              <select
-                value={batch.status}
-                onChange={e => updateStatus(e.target.value)}
-                disabled={statusSaving}
-                style={{
+              {loggedIn ? (
+                <>
+                  <select
+                    value={batch.status}
+                    onChange={e => updateStatus(e.target.value)}
+                    disabled={statusSaving}
+                    style={{
+                      padding: '0.5rem 0.9rem',
+                      borderRadius: '9999px',
+                      border: '1.5px solid var(--chalk)',
+                      background: 'var(--milk-deep)',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.7rem',
+                      letterSpacing: '0.06em',
+                      textTransform: 'uppercase',
+                      color: 'var(--stone)',
+                      cursor: 'pointer',
+                      outline: 'none',
+                    }}
+                  >
+                    {STATUS_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
+                  </select>
+                  <Link href={`/batches/${id}/edit`} className="btn btn-outline btn-sm">Edit</Link>
+                  <button onClick={deleteBatch} className="btn btn-sm" style={{ background: 'transparent', color: 'var(--pebble)', border: '1.5px solid var(--chalk)' }}>
+                    Delete
+                  </button>
+                </>
+              ) : (
+                <span style={{
                   padding: '0.5rem 0.9rem',
                   borderRadius: '9999px',
                   border: '1.5px solid var(--chalk)',
@@ -95,16 +121,10 @@ export default function BatchDetailPage() {
                   letterSpacing: '0.06em',
                   textTransform: 'uppercase',
                   color: 'var(--stone)',
-                  cursor: 'pointer',
-                  outline: 'none',
-                }}
-              >
-                {STATUS_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
-              </select>
-              <Link href={`/batches/${id}/edit`} className="btn btn-outline btn-sm">Edit</Link>
-              <button onClick={deleteBatch} className="btn btn-sm" style={{ background: 'transparent', color: 'var(--pebble)', border: '1.5px solid var(--chalk)' }}>
-                Delete
-              </button>
+                }}>
+                  {batch.status}
+                </span>
+              )}
             </div>
           </div>
 
@@ -122,13 +142,13 @@ export default function BatchDetailPage() {
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', fontWeight: 600, color: 'var(--ink)' }}>
               Log Entries <span style={{ color: 'var(--pebble)', fontWeight: 400, fontSize: '1rem' }}>({entries.length})</span>
             </h2>
-            <Link href={`/batches/${id}/entries/new`} className="btn btn-moss btn-sm">+ Add Entry</Link>
+            {loggedIn && <Link href={`/batches/${id}/entries/new`} className="btn btn-moss btn-sm">+ Add Entry</Link>}
           </div>
 
           {entries.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '3rem 0', color: 'var(--pebble)' }}>
-              <p style={{ marginBottom: '1rem' }}>No entries yet. Record your first observation.</p>
-              <Link href={`/batches/${id}/entries/new`} className="btn btn-moss btn-sm">+ Add Entry</Link>
+              <p style={{ marginBottom: '1rem' }}>No entries yet. {loggedIn ? 'Record your first observation.' : ''}</p>
+              {loggedIn && <Link href={`/batches/${id}/entries/new`} className="btn btn-moss btn-sm">+ Add Entry</Link>}
             </div>
           ) : (
             <div className="timeline">
