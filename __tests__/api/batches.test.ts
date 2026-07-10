@@ -59,4 +59,16 @@ describe('/api/batches', () => {
     expect(await res.json()).toEqual(created);
     expect(mockDb.insert).toHaveBeenCalled();
   });
+
+  it('POST passes volume fields through to the insert', async () => {
+    const { POST } = await import('@/app/api/batches/route');
+    const created = { id: 'abc', name: 'Cider', type: 'wine', startDate: '2026-01-01', volumeAmount: 5, volumeUnit: 'gallon' };
+    mockDb.insert.mockReturnValue(chainMock([created]));
+
+    const res = await POST(authedRequest({ name: 'Cider', type: 'wine', startDate: '2026-01-01', volumeAmount: 5, volumeUnit: 'gallon' }));
+
+    expect(res.status).toBe(201);
+    expect(await res.json()).toEqual(created);
+    expect(mockDb.insert).toHaveBeenCalled();
+  });
 });

@@ -58,6 +58,16 @@ describe('/api/batches/[id]', () => {
     expect(mockDb.update).toHaveBeenCalled();
   });
 
+  it('PATCH updates volume fields when authenticated', async () => {
+    const { PATCH } = await import('@/app/api/batches/[id]/route');
+    mockDb.update.mockReturnValue(chainMock([{ id: 'batch-1', volumeAmount: 750, volumeUnit: 'ml' }]));
+
+    const res = await PATCH(authedRequest('PATCH', { volumeAmount: 750, volumeUnit: 'ml' }), { params });
+
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ id: 'batch-1', volumeAmount: 750, volumeUnit: 'ml' });
+  });
+
   it('DELETE rejects unauthenticated requests without touching the db', async () => {
     const { DELETE } = await import('@/app/api/batches/[id]/route');
 

@@ -8,13 +8,19 @@
       "when": 1782239169709,
       "tag": "0000_nostalgic_shocker",
       "breakpoints": true
-    }
-    ,
+    },
     {
       "idx": 1,
       "version": "7",
       "when": 1750780800000,
       "tag": "0001_add_gravity",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1783727132812,
+      "tag": "0002_milky_queen_noir",
       "breakpoints": true
     }
   ]

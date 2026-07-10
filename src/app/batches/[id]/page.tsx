@@ -11,6 +11,9 @@ const TYPE_EMOJI: Record<string, string> = {
 };
 
 const STATUS_OPTIONS = ['active', 'paused', 'finished', 'abandoned'] as const;
+const VOLUME_UNIT_LABELS: Record<string, string> = {
+  oz: 'fl oz', pint: 'pt', quart: 'qt', gallon: 'gal', ml: 'mL', liter: 'L',
+};
 
 export default function BatchDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -84,6 +87,7 @@ export default function BatchDetailPage() {
                 </h1>
                 <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.08em', color: 'var(--pebble)', textTransform: 'uppercase' }}>
                   {batch.type} &middot; Started {new Date(batch.startDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} &middot; Day {daysActive}
+                  {batch.volumeAmount != null && <> &middot; {batch.volumeAmount} {VOLUME_UNIT_LABELS[batch.volumeUnit ?? ''] ?? batch.volumeUnit}</>}
                 </p>
               </div>
             </div>

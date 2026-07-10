@@ -14,7 +14,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const body = await request.json() as Pick<NewBatch, 'name' | 'type' | 'startDate' | 'notes' | 'gravity'>;
+  const body = await request.json() as Pick<NewBatch, 'name' | 'type' | 'startDate' | 'notes' | 'gravity' | 'volumeAmount' | 'volumeUnit'>;
 
   if (!body.name || !body.type || !body.startDate) {
     return NextResponse.json({ error: 'name, type, and startDate are required' }, { status: 400 });

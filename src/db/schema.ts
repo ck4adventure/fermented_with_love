@@ -9,6 +9,8 @@ export const batches = pgTable('batches', {
   startDate: date('start_date').notNull(),
   notes: text('notes'),
   gravity: real('gravity'),
+  volumeAmount: real('volume_amount'),
+  volumeUnit: text('volume_unit'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });

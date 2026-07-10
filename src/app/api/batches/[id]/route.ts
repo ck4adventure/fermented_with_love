@@ -22,7 +22,7 @@ export async function PATCH(request: Request, { params }: Params) {
   }
 
   const { id } = await params;
-  const body = await request.json() as Partial<Pick<NewBatch, 'name' | 'type' | 'status' | 'notes' | 'gravity'>>;
+  const body = await request.json() as Partial<Pick<NewBatch, 'name' | 'type' | 'status' | 'notes' | 'gravity' | 'volumeAmount' | 'volumeUnit'>>;
 
   const [batch] = await db
     .update(batches)

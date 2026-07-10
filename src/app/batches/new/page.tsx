@@ -5,6 +5,14 @@ import { useState } from 'react';
 import Link from 'next/link';
 
 const TYPES = ['wine', 'kefir', 'sourdough', 'kombucha', 'other'] as const;
+const VOLUME_UNITS = [
+  { value: 'oz', label: 'fl oz' },
+  { value: 'pint', label: 'pt' },
+  { value: 'quart', label: 'qt' },
+  { value: 'gallon', label: 'gal' },
+  { value: 'ml', label: 'mL' },
+  { value: 'liter', label: 'L' },
+] as const;
 
 export default function NewBatchPage() {
   const router = useRouter();
@@ -16,6 +24,8 @@ export default function NewBatchPage() {
     startDate: new Date().toISOString().split('T')[0],
     notes: '',
     gravity: '',
+    volumeAmount: '',
+    volumeUnit: 'gallon',
   });
 
   function set(field: string, value: string) {
@@ -33,6 +43,8 @@ export default function NewBatchPage() {
         body: JSON.stringify({
           ...form,
           gravity: form.gravity !== '' ? parseFloat(form.gravity) : null,
+          volumeAmount: form.volumeAmount !== '' ? parseFloat(form.volumeAmount) : null,
+          volumeUnit: form.volumeAmount !== '' ? form.volumeUnit : null,
         }),
       });
       if (!res.ok) throw new Error('Failed to create batch');
@@ -122,6 +134,30 @@ export default function NewBatchPage() {
               value={form.gravity}
               onChange={e => set('gravity', e.target.value)}
             />
+          </div>
+
+          <div className="field">
+            <label className="field-label">Volume <span style={{ color: 'var(--pebble)', fontWeight: 400 }}>(optional)</span></label>
+            <div style={{ display: 'flex', gap: '0.75rem' }}>
+              <input
+                className="field-input"
+                type="number"
+                step="0.01"
+                min="0"
+                placeholder="e.g. 5"
+                value={form.volumeAmount}
+                onChange={e => set('volumeAmount', e.target.value)}
+                style={{ flex: 1 }}
+              />
+              <select
+                className="field-input"
+                value={form.volumeUnit}
+                onChange={e => set('volumeUnit', e.target.value)}
+                style={{ flex: '0 0 auto', width: 'auto', cursor: 'pointer' }}
+              >
+                {VOLUME_UNITS.map(u => <option key={u.value} value={u.value}>{u.label}</option>)}
+              </select>
+            </div>
           </div>
 
           <div className="field">
