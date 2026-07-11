@@ -104,7 +104,7 @@ function BatchCard({ batch }: { batch: Batch }) {
 
   return (
     <Link
-      href={`/brewing/${batch.id}`}
+      href={`/winemaking/brewing/${batch.id}`}
       style={{
         display: 'block',
         padding: '1.5rem',

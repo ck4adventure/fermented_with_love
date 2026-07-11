@@ -47,7 +47,7 @@ export default function PublicBatchDetailPage() {
   );
   if (!batch) return (
     <div style={{ padding: '5rem', textAlign: 'center', color: 'var(--stone)' }}>
-      Batch not found. <Link href="/brewing" style={{ color: 'var(--moss)' }}>Back to what&apos;s brewing</Link>
+      Batch not found. <Link href="/winemaking/brewing" style={{ color: 'var(--moss)' }}>Back to what&apos;s brewing</Link>
     </div>
   );
 
@@ -57,7 +57,7 @@ export default function PublicBatchDetailPage() {
     <>
       <section style={{ paddingTop: '2.5rem', paddingBottom: '2rem', borderBottom: '1px solid var(--chalk)', background: '#fff' }}>
         <div className="container">
-          <Link href="/brewing" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.08em',
+          <Link href="/winemaking/brewing" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.08em',
             textTransform: 'uppercase', color: 'var(--moss)', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', marginBottom: '1.5rem' }}>
             ← What&apos;s brewing
           </Link>
