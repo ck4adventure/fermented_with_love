@@ -9,10 +9,11 @@ import { useLoggedIn } from '@/hooks/useLoggedIn';
 const TYPE_EMOJI: Record<string, string> = {
   wine: '🍷',
   kefir: '🥛',
-  sourdough: '🍞',
   kombucha: '🍵',
   other: '🫙',
 };
+
+//   sourdough: '🍞',
 
 const STATUS_COLORS: Record<string, string> = {
   active: 'var(--moss)',
