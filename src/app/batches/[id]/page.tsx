@@ -11,6 +11,9 @@ const TYPE_EMOJI: Record<string, string> = {
 };
 
 const STATUS_OPTIONS = ['active', 'paused', 'finished', 'abandoned'] as const;
+const VOLUME_UNIT_LABELS: Record<string, string> = {
+  oz: 'fl oz', pint: 'pt', quart: 'qt', gallon: 'gal', ml: 'mL', liter: 'L',
+};
 
 export default function BatchDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -49,6 +52,12 @@ export default function BatchDetailPage() {
     router.push('/batches');
   }
 
+  async function deleteEntry(entryId: string) {
+    if (!confirm('Delete this log entry? This cannot be undone.')) return;
+    await fetch(`/api/batches/${id}/entries/${entryId}`, { method: 'DELETE' });
+    setEntries(es => es.filter(e => e.id !== entryId));
+  }
+
   if (loading) return (
     <div style={{ padding: '5rem', textAlign: 'center', color: 'var(--pebble)' }}>Loading...</div>
   );
@@ -78,6 +87,7 @@ export default function BatchDetailPage() {
                 </h1>
                 <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.08em', color: 'var(--pebble)', textTransform: 'uppercase' }}>
                   {batch.type} &middot; Started {new Date(batch.startDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} &middot; Day {daysActive}
+                  {batch.volumeAmount != null && <> &middot; {batch.volumeAmount} {VOLUME_UNIT_LABELS[batch.volumeUnit ?? ''] ?? batch.volumeUnit}</>}
                 </p>
               </div>
             </div>
@@ -156,9 +166,28 @@ export default function BatchDetailPage() {
                 <div key={entry.id} className="timeline-item">
                   <div className="timeline-dot" style={{ background: i === 0 ? 'var(--moss)' : 'var(--chalk)', border: `2px solid ${i === 0 ? 'var(--moss)' : 'var(--pebble)'}` }} />
                   <div className="timeline-card">
-                    <p className="timeline-date">
-                      {new Date(entry.entryDate + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
-                    </p>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.75rem' }}>
+                      <p className="timeline-date">
+                        {new Date(entry.entryDate + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                      </p>
+                      {loggedIn && (
+                        <div style={{ display: 'flex', gap: '0.75rem', flexShrink: 0 }}>
+                          <Link href={`/batches/${id}/entries/${entry.id}/edit`} style={{
+                            fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.06em',
+                            textTransform: 'uppercase', color: 'var(--moss)', whiteSpace: 'nowrap',
+                          }}>
+                            Edit
+                          </Link>
+                          <button onClick={() => deleteEntry(entry.id)} style={{
+                            fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.06em',
+                            textTransform: 'uppercase', color: 'var(--pebble)', whiteSpace: 'nowrap',
+                            background: 'none', border: 'none', padding: 0, cursor: 'pointer',
+                          }}>
+                            Delete
+                          </button>
+                        </div>
+                      )}
+                    </div>
                     <p style={{ color: 'var(--ink)', fontSize: '0.95rem', lineHeight: 1.7, marginBottom: entry.actionTaken ? '0.75rem' : 0 }}>
                       {entry.observation}
                     </p>
