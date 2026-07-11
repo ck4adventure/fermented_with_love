@@ -66,8 +66,8 @@ export default function WinemakingPage() {
       {/* HERO */}
       <section className="hero">
         <div className="container">
-          <div className="hero-grid">
-            <div style={{ textAlign: "center", margin: "2rem 0" }}>
+          <div className="">
+            <div style={{ textAlign: "center", margin: "2rem 0", display: "flex", flexFlow: "column", alignItems: "center" }}>
               <span className="hero-eyebrow">Winemaking Guides</span>
               <h1 className="hero-title">
                 From Fruit to<br />
@@ -77,9 +77,16 @@ export default function WinemakingPage() {
                 A complete guide to wild fermentation, from selecting fruit to bottling. Learn the art and science of making wine at home.
               </p>
             </div>
+						<div style={{ textAlign: "center", margin: "2rem 0"}}>
+							<Link href={"/winemaking/brewing"}><span className="hero-eyebrow" style={{ margin: "0 2rem", background: "moccasin"}}>See What's Brewing</span></Link>
+							<Link href={"/winemaking/batches"}><span className="hero-eyebrow" style={{ margin: "0 2rem", background: "lightgreen"}}>Batch Log</span></Link>
+						</div>
           </div>
         </div>
       </section>
+			<section>
+
+			</section>
 
       {/* CONTENT */}
       <section className="section">
