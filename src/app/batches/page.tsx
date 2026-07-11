@@ -29,10 +29,16 @@ export default function BatchesPage() {
 
   useEffect(() => {
     fetch('/api/batches')
-      .then(r => r.json())
+      .then(r => {
+        if (r.status === 401) {
+          router.push('/login');
+          return [];
+        }
+        return r.json();
+      })
       .then(setBatches)
       .finally(() => setLoading(false));
-  }, []);
+  }, [router]);
 
   async function handleLogout() {
     await fetch('/api/auth/logout', { method: 'POST' });

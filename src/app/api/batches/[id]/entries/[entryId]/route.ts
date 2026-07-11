@@ -1,14 +1,20 @@
 import { db } from '@/db';
 import { batchEntries, type NewBatchEntry } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
-import { isAuthenticated } from '@/lib/auth';
+import { getCurrentUser } from '@/lib/auth';
+import { getOwnedEntry } from '@/lib/ownership';
 
 type Params = { params: Promise<{ id: string; entryId: string }> };
 
-export async function GET(_req: Request, { params }: Params) {
-  const { entryId } = await params;
-  const [entry] = await db.select().from(batchEntries).where(eq(batchEntries.id, entryId));
+export async function GET(request: Request, { params }: Params) {
+  const user = await getCurrentUser(request);
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const { id, entryId } = await params;
+  const entry = await getOwnedEntry(user.id, id, entryId);
 
   if (!entry) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
@@ -17,17 +23,23 @@ export async function GET(_req: Request, { params }: Params) {
 }
 
 export async function PATCH(request: Request, { params }: Params) {
-  if (!isAuthenticated(request)) {
+  const user = await getCurrentUser(request);
+  if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const { entryId } = await params;
+  const { id, entryId } = await params;
+  const owned = await getOwnedEntry(user.id, id, entryId);
+  if (!owned) {
+    return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  }
+
   const body = await request.json() as Partial<Pick<NewBatchEntry, 'entryDate' | 'observation' | 'actionTaken' | 'gravity'>>;
 
   const [entry] = await db
     .update(batchEntries)
     .set(body)
-    .where(eq(batchEntries.id, entryId))
+    .where(and(eq(batchEntries.id, entryId), eq(batchEntries.batchId, id)))
     .returning();
 
   if (!entry) {
@@ -37,12 +49,21 @@ export async function PATCH(request: Request, { params }: Params) {
 }
 
 export async function DELETE(request: Request, { params }: Params) {
-  if (!isAuthenticated(request)) {
+  const user = await getCurrentUser(request);
+  if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const { entryId } = await params;
-  const [entry] = await db.delete(batchEntries).where(eq(batchEntries.id, entryId)).returning();
+  const { id, entryId } = await params;
+  const owned = await getOwnedEntry(user.id, id, entryId);
+  if (!owned) {
+    return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  }
+
+  const [entry] = await db
+    .delete(batchEntries)
+    .where(and(eq(batchEntries.id, entryId), eq(batchEntries.batchId, id)))
+    .returning();
 
   if (!entry) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 });

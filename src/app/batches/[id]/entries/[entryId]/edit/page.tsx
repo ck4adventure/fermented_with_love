@@ -14,16 +14,26 @@ export default function EditEntryPage() {
   const [form, setForm] = useState({ entryDate: '', observation: '', actionTaken: '', gravity: '' });
 
   useEffect(() => {
-    fetch(`/api/batches/${id}/entries/${entryId}`)
-      .then(r => r.json())
-      .then((e: BatchEntry) => setForm({
-        entryDate: e.entryDate,
-        observation: e.observation,
-        actionTaken: e.actionTaken ?? '',
-        gravity: e.gravity != null ? String(e.gravity) : '',
-      }))
-      .finally(() => setLoading(false));
-  }, [id, entryId]);
+    fetch(`/api/batches/${id}/entries/${entryId}`).then(r => {
+      if (r.status === 401) {
+        router.push('/login');
+        return;
+      }
+      if (!r.ok) {
+        router.push(`/batches/${id}`);
+        return;
+      }
+      r.json().then((e: BatchEntry) => {
+        setForm({
+          entryDate: e.entryDate,
+          observation: e.observation,
+          actionTaken: e.actionTaken ?? '',
+          gravity: e.gravity != null ? String(e.gravity) : '',
+        });
+        setLoading(false);
+      });
+    });
+  }, [id, entryId, router]);
 
   function set(field: string, value: string) {
     setForm(f => ({ ...f, [field]: value }));

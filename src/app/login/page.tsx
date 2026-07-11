@@ -10,6 +10,7 @@ function LoginForm() {
   const searchParams = useSearchParams();
   const from = searchParams.get('from') ?? '/batches';
 
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
@@ -23,13 +24,13 @@ function LoginForm() {
     const res = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password }),
+      body: JSON.stringify({ email, password }),
     });
 
     if (res.ok) {
       window.location.href = from;
     } else {
-      setError('Incorrect password.');
+      setError('Incorrect email or password.');
       setLoading(false);
     }
   }
@@ -73,6 +74,33 @@ function LoginForm() {
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
             <label style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--stone)' }}>
+              Email
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              autoFocus
+              required
+              style={{
+                padding: '0.65rem 0.9rem',
+                border: `1.5px solid ${error ? '#c0392b' : 'var(--chalk)'}`,
+                borderRadius: '8px',
+                fontFamily: 'var(--font-body)',
+                fontSize: '0.95rem',
+                color: 'var(--ink)',
+                background: '#fff',
+                outline: 'none',
+                transition: 'border-color 150ms',
+                width: '100%',
+              }}
+              onFocus={e => { if (!error) e.target.style.borderColor = 'var(--moss)'; }}
+              onBlur={e => { if (!error) e.target.style.borderColor = 'var(--chalk)'; }}
+            />
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+            <label style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--stone)' }}>
               Password
             </label>
             <div style={{ position: 'relative' }}>
@@ -80,7 +108,6 @@ function LoginForm() {
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                autoFocus
                 required
                 style={{
                   padding: '0.65rem 2.75rem 0.65rem 0.9rem',

@@ -24,18 +24,28 @@ export default function EditBatchPage() {
   const [form, setForm] = useState({ name: '', type: 'wine', notes: '', gravity: '', volumeAmount: '', volumeUnit: 'gallon' });
 
   useEffect(() => {
-    fetch(`/api/batches/${id}`)
-      .then(r => r.json())
-      .then((b: Batch) => setForm({
-        name: b.name,
-        type: b.type,
-        notes: b.notes ?? '',
-        gravity: b.gravity != null ? String(b.gravity) : '',
-        volumeAmount: b.volumeAmount != null ? String(b.volumeAmount) : '',
-        volumeUnit: b.volumeUnit ?? 'gallon',
-      }))
-      .finally(() => setLoading(false));
-  }, [id]);
+    fetch(`/api/batches/${id}`).then(r => {
+      if (r.status === 401) {
+        router.push('/login');
+        return;
+      }
+      if (!r.ok) {
+        router.push('/batches');
+        return;
+      }
+      r.json().then((b: Batch) => {
+        setForm({
+          name: b.name,
+          type: b.type,
+          notes: b.notes ?? '',
+          gravity: b.gravity != null ? String(b.gravity) : '',
+          volumeAmount: b.volumeAmount != null ? String(b.volumeAmount) : '',
+          volumeUnit: b.volumeUnit ?? 'gallon',
+        });
+        setLoading(false);
+      });
+    });
+  }, [id, router]);
 
   function set(field: string, value: string) {
     setForm(f => ({ ...f, [field]: value }));
