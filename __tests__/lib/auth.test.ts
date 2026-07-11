@@ -1,43 +1,60 @@
 /**
  * @jest-environment node
  */
-import { isAuthenticated } from '@/lib/auth';
+import { chainMock } from '../../test-utils/chainMock';
 
-const ORIGINAL_ENV = process.env;
+const mockDb = { select: jest.fn() };
+jest.mock('@/db', () => ({ db: mockDb }));
 
-describe('isAuthenticated', () => {
+import { getCurrentUser } from '@/lib/auth';
+
+function requestWithCookie(cookie?: string) {
+  const headers = new Headers();
+  if (cookie !== undefined) headers.set('cookie', cookie);
+  return new Request('http://localhost/api/batches', { headers });
+}
+
+describe('getCurrentUser', () => {
   beforeEach(() => {
-    process.env = { ...ORIGINAL_ENV, SESSION_SECRET: 'super-secret' };
+    jest.clearAllMocks();
   });
 
-  afterAll(() => {
-    process.env = ORIGINAL_ENV;
+  it('returns null when there is no cookie header', async () => {
+    expect(await getCurrentUser(requestWithCookie())).toBeNull();
+    expect(mockDb.select).not.toHaveBeenCalled();
   });
 
-  function requestWithCookie(cookie?: string) {
-    const headers = new Headers();
-    if (cookie !== undefined) headers.set('cookie', cookie);
-    return new Request('http://localhost/api/batches', { headers });
-  }
+  it('returns the user for a valid, unexpired session', async () => {
+    mockDb.select.mockReturnValueOnce(chainMock([
+      { id: 'user-1', email: 'a@b.com', expiresAt: new Date(Date.now() + 1000 * 60 * 60) },
+    ]));
 
-  it('returns true when the session cookie matches the secret', () => {
-    expect(isAuthenticated(requestWithCookie('fwl_session=super-secret'))).toBe(true);
+    const result = await getCurrentUser(requestWithCookie('fwl_session=some-token'));
+
+    expect(result).toEqual({ id: 'user-1', email: 'a@b.com' });
   });
 
-  it('returns true when the session cookie is alongside other cookies', () => {
-    expect(isAuthenticated(requestWithCookie('foo=bar; fwl_session=super-secret; baz=qux'))).toBe(true);
+  it('finds the cookie alongside other cookies', async () => {
+    mockDb.select.mockReturnValueOnce(chainMock([
+      { id: 'user-1', email: 'a@b.com', expiresAt: new Date(Date.now() + 1000 * 60 * 60) },
+    ]));
+
+    const result = await getCurrentUser(requestWithCookie('foo=bar; fwl_session=some-token; baz=qux'));
+
+    expect(result).toEqual({ id: 'user-1', email: 'a@b.com' });
   });
 
-  it('returns false when there is no cookie header', () => {
-    expect(isAuthenticated(requestWithCookie())).toBe(false);
+  it('returns null when the session has expired', async () => {
+    mockDb.select.mockReturnValueOnce(chainMock([
+      { id: 'user-1', email: 'a@b.com', expiresAt: new Date(Date.now() - 1000) },
+    ]));
+
+    expect(await getCurrentUser(requestWithCookie('fwl_session=expired-token'))).toBeNull();
   });
 
-  it('returns false when the session cookie value is wrong', () => {
-    expect(isAuthenticated(requestWithCookie('fwl_session=wrong-value'))).toBe(false);
-  });
+  it('returns null when no session matches the token', async () => {
+    mockDb.select.mockReturnValueOnce(chainMock([]));
 
-  it('returns false when SESSION_SECRET is not configured', () => {
-    delete process.env.SESSION_SECRET;
-    expect(isAuthenticated(requestWithCookie('fwl_session=super-secret'))).toBe(false);
+    expect(await getCurrentUser(requestWithCookie('fwl_session=unknown-token'))).toBeNull();
   });
 });

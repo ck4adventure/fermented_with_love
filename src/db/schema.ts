@@ -1,8 +1,24 @@
 import { pgTable, uuid, text, date, timestamp, real } from 'drizzle-orm/pg-core';
 
+export const users = pgTable('users', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  email: text('email').notNull().unique(),
+  passwordHash: text('password_hash').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export const sessions = pgTable('sessions', {
+  tokenHash: text('token_hash').primaryKey(),
+  userId: uuid('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  expiresAt: timestamp('expires_at').notNull(),
+});
+
 export const batches = pgTable('batches', {
   id: uuid('id').defaultRandom().primaryKey(),
-  userId: text('user_id'),
+  ownerId: uuid('owner_id').references(() => users.id),
   name: text('name').notNull(),
   type: text('type').notNull(),
   status: text('status').notNull().default('active'),
@@ -27,6 +43,9 @@ export const batchEntries = pgTable('batch_entries', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
+export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;
+export type Session = typeof sessions.$inferSelect;
 export type Batch = typeof batches.$inferSelect;
 export type NewBatch = typeof batches.$inferInsert;
 export type BatchEntry = typeof batchEntries.$inferSelect;

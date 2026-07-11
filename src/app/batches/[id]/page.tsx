@@ -25,14 +25,24 @@ export default function BatchDetailPage() {
   const [statusSaving, setStatusSaving] = useState(false);
 
   useEffect(() => {
-    Promise.all([
-      fetch(`/api/batches/${id}`).then(r => r.json()),
-      fetch(`/api/batches/${id}/entries`).then(r => r.json()),
-    ]).then(([b, e]) => {
+    fetch(`/api/batches/${id}`).then(async r => {
+      if (r.status === 401) {
+        router.push('/login');
+        return;
+      }
+      if (!r.ok) {
+        setLoading(false);
+        return;
+      }
+      const [b, e] = await Promise.all([
+        r.json(),
+        fetch(`/api/batches/${id}/entries`).then(er => (er.ok ? er.json() : [])),
+      ]);
       setBatch(b);
       setEntries(e);
-    }).finally(() => setLoading(false));
-  }, [id]);
+      setLoading(false);
+    });
+  }, [id, router]);
 
   async function updateStatus(status: string) {
     if (!batch) return;
