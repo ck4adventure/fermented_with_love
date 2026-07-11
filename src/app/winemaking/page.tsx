@@ -79,7 +79,7 @@ export default function WinemakingPage() {
             </div>
 						<div style={{ textAlign: "center", margin: "2rem 0"}}>
 							<Link href={"/winemaking/brewing"}><span className="hero-eyebrow" style={{ margin: "0 2rem", background: "moccasin"}}>See What's Brewing</span></Link>
-							<Link href={"/winemaking/batches"}><span className="hero-eyebrow" style={{ margin: "0 2rem", background: "lightgreen"}}>Batch Log</span></Link>
+							{/* <Link href={"/winemaking/batches"}><span className="hero-eyebrow" style={{ margin: "0 2rem", background: "lightgreen"}}>Batch Log</span></Link> */}
 						</div>
           </div>
         </div>
