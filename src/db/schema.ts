@@ -18,7 +18,9 @@ export const sessions = pgTable('sessions', {
 
 export const batches = pgTable('batches', {
   id: uuid('id').defaultRandom().primaryKey(),
-  ownerId: uuid('owner_id').references(() => users.id),
+  ownerId: uuid('owner_id')
+    .notNull()
+    .references(() => users.id),
   name: text('name').notNull(),
   type: text('type').notNull(),
   status: text('status').notNull().default('active'),

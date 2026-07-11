@@ -1,0 +1,1 @@
+ALTER TABLE "batches" ALTER COLUMN "owner_id" SET NOT NULL;

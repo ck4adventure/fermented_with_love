@@ -36,6 +36,13 @@
       "when": 1783729679136,
       "tag": "0004_red_power_pack",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1783732536091,
+      "tag": "0005_same_colossus",
+      "breakpoints": true
     }
   ]
 }
