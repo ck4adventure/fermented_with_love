@@ -25,3 +25,14 @@ export async function getOwnedEntry(userId: string, batchId: string, entryId: st
     .where(and(eq(batchEntries.id, entryId), eq(batchEntries.batchId, batchId)));
   return entry ?? null;
 }
+
+// The one account (if any) whose batches are shown on the public, no-login /brewing pages.
+export function getPublicUserId(): string | null {
+  return process.env.PUBLIC_USER_ID ?? null;
+}
+
+export async function getPublicBatch(batchId: string) {
+  const publicUserId = getPublicUserId();
+  if (!publicUserId) return null;
+  return getOwnedBatch(publicUserId, batchId);
+}

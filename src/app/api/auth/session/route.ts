@@ -3,5 +3,5 @@ import { getCurrentUser } from '@/lib/auth';
 
 export async function GET(request: Request) {
   const user = await getCurrentUser(request);
-  return NextResponse.json({ loggedIn: Boolean(user), email: user?.email ?? null });
+  return NextResponse.json({ loggedIn: Boolean(user), email: user?.email ?? null, id: user?.id ?? null });
 }
