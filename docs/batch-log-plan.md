@@ -100,7 +100,7 @@ src/
 ### Changes from Phase 1
 
 1. Install Clerk: `npm install @clerk/nextjs`
-2. Add Clerk middleware (`src/middleware.ts`) — protects `/batches/**` routes, redirects unauthenticated users to sign-in
+2. Add Clerk middleware (`src/middleware.ts`) — protects `/winemaking/batches/**` routes, redirects unauthenticated users to sign-in
 3. Wrap `layout.tsx` with `<ClerkProvider>`
 4. Add sign-in / sign-up pages (Clerk provides pre-built components)
 5. Add a sign-in/out button to the site navigation
@@ -120,7 +120,7 @@ src/
 
 ### Definition of Done
 
-- Unauthenticated users are redirected to sign-in when accessing `/batches`
+- Unauthenticated users are redirected to sign-in when accessing `/winemaking/batches`
 - New users can register with email/password (or OAuth if configured in Clerk)
 - Each user's batch list and entries are private to them
 - No user can read or modify another user's batches via the API

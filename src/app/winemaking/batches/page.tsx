@@ -69,7 +69,7 @@ export default function BatchesPage() {
                   <button onClick={handleLogout} className="btn btn-sm" style={{ background: 'transparent', color: 'var(--pebble)', border: '1.5px solid var(--chalk)' }}>
                     Sign out
                   </button>
-                  <Link href="/batches/new" className="btn btn-moss btn-md">
+                  <Link href="/winemaking/batches/new" className="btn btn-moss btn-md">
                     + New Batch
                   </Link>
                 </>
@@ -91,7 +91,7 @@ export default function BatchesPage() {
             <div style={{ textAlign: 'center', padding: '5rem 0' }}>
               <p style={{ fontSize: '3rem', marginBottom: '1rem' }}>🫙</p>
               <p style={{ color: 'var(--stone)', marginBottom: '1.5rem' }}>No batches yet. {loggedIn ? 'Start your first ferment!' : ''}</p>
-              {loggedIn && <Link href="/batches/new" className="btn btn-moss btn-md">+ New Batch</Link>}
+              {loggedIn && <Link href="/winemaking/batches/new" className="btn btn-moss btn-md">+ New Batch</Link>}
             </div>
           ) : (
             <>
@@ -141,7 +141,7 @@ function BatchCard({ batch }: { batch: Batch }) {
 
   return (
     <Link
-      href={`/batches/${batch.id}`}
+      href={`/winemaking/batches/${batch.id}`}
       style={{
         display: 'block',
         padding: '1.5rem',

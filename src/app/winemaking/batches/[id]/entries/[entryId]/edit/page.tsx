@@ -20,7 +20,7 @@ export default function EditEntryPage() {
         return;
       }
       if (!r.ok) {
-        router.push(`/batches/${id}`);
+        router.push(`/winemaking/batches/${id}`);
         return;
       }
       r.json().then((e: BatchEntry) => {
@@ -53,7 +53,7 @@ export default function EditEntryPage() {
         }),
       });
       if (!res.ok) throw new Error();
-      router.push(`/batches/${id}`);
+      router.push(`/winemaking/batches/${id}`);
     } catch {
       setError('Something went wrong. Please try again.');
       setSaving(false);
@@ -65,7 +65,7 @@ export default function EditEntryPage() {
   return (
     <section className="section" style={{ paddingTop: '3rem' }}>
       <div className="container-prose">
-        <Link href={`/batches/${id}`} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.08em',
+        <Link href={`/winemaking/batches/${id}`} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.08em',
           textTransform: 'uppercase', color: 'var(--moss)', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', marginBottom: '2rem' }}>
           ← Back to batch
         </Link>
@@ -123,7 +123,7 @@ export default function EditEntryPage() {
 
           <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
             <button type="submit" className="btn btn-moss btn-md" disabled={saving}>{saving ? 'Saving...' : 'Save Changes'}</button>
-            <Link href={`/batches/${id}`} className="btn btn-outline btn-md">Cancel</Link>
+            <Link href={`/winemaking/batches/${id}`} className="btn btn-outline btn-md">Cancel</Link>
           </div>
         </form>
       </div>

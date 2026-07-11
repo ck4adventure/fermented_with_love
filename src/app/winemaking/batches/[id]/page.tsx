@@ -73,7 +73,7 @@ export default function BatchDetailPage() {
   );
   if (!batch) return (
     <div style={{ padding: '5rem', textAlign: 'center', color: 'var(--stone)' }}>
-      Batch not found. <Link href="/batches" style={{ color: 'var(--moss)' }}>Back to batches</Link>
+      Batch not found. <Link href="/winemaking/batches" style={{ color: 'var(--moss)' }}>Back to batches</Link>
     </div>
   );
 
@@ -83,7 +83,7 @@ export default function BatchDetailPage() {
     <>
       <section style={{ paddingTop: '2.5rem', paddingBottom: '2rem', borderBottom: '1px solid var(--chalk)', background: '#fff' }}>
         <div className="container">
-          <Link href="/batches" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.08em',
+          <Link href="/winemaking/batches" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.08em',
             textTransform: 'uppercase', color: 'var(--moss)', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', marginBottom: '1.5rem' }}>
             ← All batches
           </Link>
@@ -125,7 +125,7 @@ export default function BatchDetailPage() {
                   >
                     {STATUS_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
                   </select>
-                  <Link href={`/batches/${id}/edit`} className="btn btn-outline btn-sm">Edit</Link>
+                  <Link href={`/winemaking/batches/${id}/edit`} className="btn btn-outline btn-sm">Edit</Link>
                   <button onClick={deleteBatch} className="btn btn-sm" style={{ background: 'transparent', color: 'var(--pebble)', border: '1.5px solid var(--chalk)' }}>
                     Delete
                   </button>
@@ -162,13 +162,13 @@ export default function BatchDetailPage() {
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', fontWeight: 600, color: 'var(--ink)' }}>
               Log Entries <span style={{ color: 'var(--pebble)', fontWeight: 400, fontSize: '1rem' }}>({entries.length})</span>
             </h2>
-            {loggedIn && <Link href={`/batches/${id}/entries/new`} className="btn btn-moss btn-sm">+ Add Entry</Link>}
+            {loggedIn && <Link href={`/winemaking/batches/${id}/entries/new`} className="btn btn-moss btn-sm">+ Add Entry</Link>}
           </div>
 
           {entries.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '3rem 0', color: 'var(--pebble)' }}>
               <p style={{ marginBottom: '1rem' }}>No entries yet. {loggedIn ? 'Record your first observation.' : ''}</p>
-              {loggedIn && <Link href={`/batches/${id}/entries/new`} className="btn btn-moss btn-sm">+ Add Entry</Link>}
+              {loggedIn && <Link href={`/winemaking/batches/${id}/entries/new`} className="btn btn-moss btn-sm">+ Add Entry</Link>}
             </div>
           ) : (
             <div className="timeline">
@@ -182,7 +182,7 @@ export default function BatchDetailPage() {
                       </p>
                       {loggedIn && (
                         <div style={{ display: 'flex', gap: '0.75rem', flexShrink: 0 }}>
-                          <Link href={`/batches/${id}/entries/${entry.id}/edit`} style={{
+                          <Link href={`/winemaking/batches/${id}/entries/${entry.id}/edit`} style={{
                             fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.06em',
                             textTransform: 'uppercase', color: 'var(--moss)', whiteSpace: 'nowrap',
                           }}>

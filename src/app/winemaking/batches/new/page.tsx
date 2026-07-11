@@ -49,7 +49,7 @@ export default function NewBatchPage() {
       });
       if (!res.ok) throw new Error('Failed to create batch');
       const batch = await res.json();
-      router.push(`/batches/${batch.id}`);
+      router.push(`/winemaking/batches/${batch.id}`);
     } catch {
       setError('Something went wrong. Please try again.');
       setSaving(false);
@@ -59,7 +59,7 @@ export default function NewBatchPage() {
   return (
     <section className="section" style={{ paddingTop: '3rem' }}>
       <div className="container-prose">
-        <Link href="/batches" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.08em',
+        <Link href="/winemaking/batches" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.08em',
           textTransform: 'uppercase', color: 'var(--moss)', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', marginBottom: '2rem' }}>
           ← Back to batches
         </Link>
@@ -178,7 +178,7 @@ export default function NewBatchPage() {
             <button type="submit" className="btn btn-moss btn-md" disabled={saving}>
               {saving ? 'Creating...' : 'Create Batch'}
             </button>
-            <Link href="/batches" className="btn btn-outline btn-md">Cancel</Link>
+            <Link href="/winemaking/batches" className="btn btn-outline btn-md">Cancel</Link>
           </div>
         </form>
       </div>
